@@ -1,0 +1,12 @@
+FSharp.Configuration
+FSharp.Core
+Fsharp.Data
+FsNetMQ
+FSharp.Control.Reactive
+System.Reactive.Compatibility
+Zulib
+Infrastructure
+Consensus
+Api
+MongoDB.Driver
+MongoDB.FSharp

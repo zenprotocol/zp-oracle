@@ -1,0 +1,24 @@
+nodeApi: 127.0.0.1:11567
+api: 127.0.0.1:8085
+tickers:
+  - AAPL
+  - GOOG
+  - TRIP
+  - INTC
+  - ZNGA
+  - MSFT
+  - FB
+  - AAL
+  - ADSK
+  - AMAT
+  - AMZN
+  - BIDU
+  - CHKP
+  - CMCSA
+  - FOX
+  - PYPL
+  - QCOM
+  - AABA
+  - TSLA
+interval: 1
+contract: ctzn1qqqqqqqrjguhzhxwr2jzn3neqd07707mses6s7zj3ymxntad8xx09r8qkuyeemac9
