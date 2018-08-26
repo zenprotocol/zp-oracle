@@ -1,0 +1,18 @@
+# zen-oracel systemd unit
+
+[Unit]
+Description=Zen Oracle
+After=network.target
+
+[Service]
+Environment=intrinio_user_name=<intrinio_user_name>
+Environment=intrinio_password=<intrinio_password>
+Environment=zen_accout_password=<zen_account_password>
+
+Type=simple
+WorkingDirectory=/home/user_name/
+ExecStart=/usr/bin/mono /home/user_name/zen-oracle.exe
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
