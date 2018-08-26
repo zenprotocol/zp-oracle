@@ -1,0 +1,22 @@
+generate_load_scripts: true
+source https://nuget.org/api/v2
+
+framework: 47
+
+nuget System.Reactive.Compatibility
+nuget FSharp.Core 4.3.4
+nuget FSharp.Data
+nuget FSharp.Configuration
+nuget FSharp.Control.Reactive
+nuget FSharpx.Collections
+nuget NetMQ >= 4.0.0.175-pre
+nuget FsNetMQ >= 0.2.8.0
+nuget MongoDB.Driver
+nuget MongoDB.FSharp
+
+source https://www.myget.org/F/zenprotocol/api/v2
+
+nuget Zulib 0.3.36
+nuget Infrastructure >= 0.9.14
+nuget Consensus >= 0.9.14
+nuget Api >= 0.9.14
