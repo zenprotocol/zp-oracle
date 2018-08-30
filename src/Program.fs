@@ -55,37 +55,42 @@ let main _ =
                 fun _ -> RawResultJson.Parse(raw)) "error parsing provider data")
         <@> fun x -> x.Data
         <@> Array.map (fun x -> x.Identifier, x.Value)
-        <@> DataAccess.insert
-        <@> Array.map Merkle.hashLeaf
-        <@> Array.toList 
-        <@> MerkleTree.computeRoot
-        <@> (Hash.bytes >> Zen.Types.Data.data.Hash >> Data.serialize >> Base16.encode)
-        <@> (fun messageBody ->
-            (new ContractExecuteRequestJson.Root(
-                config.contract, 
-                "Add", 
-                messageBody,
-                new ContractExecuteRequestJson.Options(false, "m/44'/258'/0'/3/0"),
-                Array.empty,
-                zenPassword
-            )))
-        >>= (fun json ->
-            printfn "making a commitment on the blockchain..."
-
-            Exception.resultWrap<HttpResponse> (fun _ -> 
-                (sprintf "http://%s/wallet/contract/execute" config.nodeApi)
-                |> json.JsonValue.Request) "error communicating with zen-node"
-            )
-        >>= (fun response ->
-            if response.StatusCode <> 200 then 
-                sprintf "could not execute contract: %A" response.Body
-                |> Error
-            else
-                Ok ())
+        <@> (fun data ->
+            data
+            |> Array.map Merkle.hashLeaf
+            |> Array.toList
+            |> MerkleTree.computeRoot
+            |> Hash.bytes
+            |> Zen.Types.Data.data.Hash
+            |> Data.serialize
+            |> Base16.encode
+            |> (fun messageBody ->
+                (new ContractExecuteRequestJson.Root(
+                    config.contract, 
+                    "Add", 
+                    messageBody,
+                    new ContractExecuteRequestJson.Options(false, "m/44'/258'/0'/3/0"),
+                    Array.empty,
+                    zenPassword
+                )))
+            |> (fun json ->
+                printfn "making a commitment on the blockchain..."
+    
+                Exception.resultWrap<HttpResponse> (fun _ -> 
+                    (sprintf "http://%s/wallet/contract/execute" config.nodeApi)
+                    |> json.JsonValue.Request) "error communicating with zen-node"
+                )
+            >>= (fun response ->
+                if response.StatusCode <> 200 then 
+                    sprintf "could not execute contract: %A" response.Body
+                    |> Error
+                else
+                    Ok data)
+            <@> DataAccess.insert
+        )
         |> Result.mapError (printfn "%A")
         |> ignore
-        
+            
         printfn "waiting..."
         Threading.Thread.Sleep (1000 * 60 * 60 * config.interval)
-
     0
